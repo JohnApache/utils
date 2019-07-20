@@ -5,7 +5,7 @@ import json from 'rollup-plugin-json';
 export default {
 	input: 'src/index.js',
 	output: {
-		file: 'bundle.js',
+		file: 'dist/index.js',
 		format: 'umd',
 		name: 'JAUtils'
 	},
@@ -15,7 +15,7 @@ export default {
 		json(),
 		babel({
 			exclude: ['node_modules/**'],
-			externalHelpers: true
+			runtimeHelpers: true
 		})
 	]
 };

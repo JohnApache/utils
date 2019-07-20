@@ -38,3 +38,11 @@ export const isArray = (target) => {
 export const isObject = (target) => {
 	return Object.prototype.toString.call(target) === '[object Object]';
 };
+
+export const isDate = (target) => {
+	return Object.prototype.toString.call(target) === '[object Date]';
+};
+
+export const isRegExp = (target) => {
+	return Object.prototype.toString.call(target) === '[object RegExp]';
+};

@@ -14,8 +14,8 @@ const presets = [
 	],
 ];
 
-const plugins = [
-	'@babel/plugin-external-helpers'
-];
+// const plugins = [
+// 	'@babel/plugin-external-helpers'
+// ];
   
-module.exports = { presets, plugins };
+module.exports = { presets };

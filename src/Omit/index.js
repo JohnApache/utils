@@ -6,7 +6,7 @@ import au from '../ArrayUtils';
  * @param {array|string|symbol} keys 删除键
  * @param {boolean} runInSelf 是否作用于自身
  */
-const OmitKeys = (object, keys) => {
+export const OmitKeys = (object, keys) => {
 	if(
 		!tc.isObject(object)
 	) {
@@ -29,4 +29,6 @@ const OmitKeys = (object, keys) => {
 	return result;
 };
 
-export default OmitKeys;
+export const OmitValues = (object, vals) => {
+	
+}; 

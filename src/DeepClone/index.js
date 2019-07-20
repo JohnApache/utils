@@ -1,17 +1,12 @@
 import * as tc from '../TypeChecker';
 
-const clonedMap = new Map();
-
-/**
- * 深度克隆
- * @param {any} target 
- * @param {object} options 
- */
-const DeepClone = (target) => {
+const _DeepClone = (target) => {
 	if(
 		isSimpleData(target) ||
 		tc.isNil(target) ||
-        tc.isFunction(target)
+		tc.isFunction(target) ||
+		tc.isDate(target) ||
+		tc.isRegExp(target)
 	) {
 		return cloneSimpleData(target);
 	}
@@ -43,7 +38,7 @@ const cloneArrayData = (target) => {
 	}
 	const cloneResult = [];
 	clonedMap.set(target, cloneResult);
-	const res = target.map(v => DeepClone(v));
+	const res = target.map(v => _DeepClone(v));
 	cloneResult.push(...res);
 	return cloneResult;
 };
@@ -56,18 +51,31 @@ const cloneObjectData = (target) => {
 	clonedMap.set(target, cloneResult);
 	for(let key in target) {
 		if(target.hasOwnProperty(key)) {
-			cloneResult[key] = DeepClone(target[key]);
+			cloneResult[key] = _DeepClone(target[key]);
 		}
 	}
 
-	if(typeof Symbol === 'symbol') {
+	if(typeof Symbol !== 'undefined') {
 		const symbolKeys = Object.getOwnPropertySymbols(target);
 		symbolKeys.forEach(symbol => {
-			cloneResult[symbol] = DeepClone(target[symbol]);
+			cloneResult[symbol] = _DeepClone(target[symbol]);
 		});
 	}
 
 	return cloneResult;
+};
+
+let clonedMap = new Map();
+
+
+/**
+ * 深度克隆目标数据
+ * @param {any} target 
+ * @param {object} options 
+ */
+const DeepClone = (target) => {
+	clonedMap = new Map();
+	return _DeepClone(target);
 };
 
 export default DeepClone;

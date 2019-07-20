@@ -10,13 +10,16 @@ module.exports = {
         "sourceType": "module"
     },
     "globals": {
-        "define": true
+        "define": true,
+        "describe": true,
+        "it": true
     },
     "rules": {
         "indent": [
             "error",
             "tab"
         ],
+        "no-console": 'off',
         "linebreak-style": [
             "error",
             "unix"
