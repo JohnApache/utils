@@ -1842,12 +1842,13 @@
 
 	var ArrayExcept = function ArrayExcept(sourceArray, destArray) {
 	  if (!isArray(sourceArray) || !isArray(destArray)) {
-	    throw new Error('params sourceArray or destArray not an array');
+	    throw new TypeError('params sourceArray or destArray not an array');
 	  }
 
 	  if (sourceArray.length <= 0 || destArray.length <= 0) return [];
 	  return sourceArray.filter(function (val) {
 	    return destArray.every(function (v) {
+	      if (Number.isNaN(val) && Number.isNaN(v)) return false;
 	      return val !== v;
 	    });
 	  });
@@ -1906,7 +1907,7 @@
 
 	var ArrayUnion = function ArrayUnion(sourceArray, destArray) {
 	  if (!isArray(sourceArray) || !isArray(destArray)) {
-	    throw new Error('params sourceArray or destArray not an array');
+	    throw new TypeError('params sourceArray or destArray not an array');
 	  }
 
 	  var result = new Set(sourceArray.concat(destArray));
@@ -1921,12 +1922,13 @@
 
 	var ArrayIntersect = function ArrayIntersect(sourceArray, destArray) {
 	  if (!isArray(sourceArray) || !isArray(destArray)) {
-	    throw new Error('params sourceArray or destArray not an array');
+	    throw new TypeError('params sourceArray or destArray not an array');
 	  }
 
 	  if (sourceArray.length <= 0 || destArray.length <= 0) return [];
 	  return sourceArray.filter(function (val) {
 	    return destArray.some(function (v) {
+	      if (Number.isNaN(val) && Number.isNaN(v)) return true;
 	      return val === v;
 	    });
 	  });
@@ -1947,40 +1949,94 @@
 
 	var OmitKeys = function OmitKeys(object, keys) {
 	  if (!isObject(object)) {
-	    throw new Error('keys type is array or string, symbol');
+	    throw new TypeError('object type is array or string, symbol');
 	  }
 
-	  if (!isString(keys) || !isSymbol$1(keys) || !isArray(keys)) {
-	    throw new Error('keys type is array or string, symbol');
+	  if (!isString(keys) && !isSymbol$1(keys) && !isArray(keys)) {
+	    throw new TypeError('keys type is array or string, symbol');
 	  }
 
 	  var result = {};
-	  var exceptKeys = arrayUtils.ArrayExcept(Object.keys(object), [].concat(keys));
+	  var allKeys = arrayUtils.ArrayUnion(Object.keys(object), Object.getOwnPropertySymbols(object));
+	  var exceptKeys = arrayUtils.ArrayExcept(allKeys, [].concat(keys));
 	  exceptKeys.forEach(function (v) {
 	    result[v] = object[v];
 	  });
 	  return result;
 	};
-	var OmitValues = function OmitValues(object, vals) {};
+	/**
+	 *删除object指定value 并返回删除后的 对象
+	 * @param  {boolean} isDeep 是否深度比较值 默认false
+	 * @param {object} object 
+	 * @param  {...any} vals 要删除的value 可以为多个
+	 */
 
-	var omit = /*#__PURE__*/Object.freeze({
+	var OmitValues = function OmitValues(isDeep, object) {
+	  for (var _len = arguments.length, vals = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+	    vals[_key - 2] = arguments[_key];
+	  }
+
+	  if (!isObject(object)) {
+	    throw new TypeError('keys type is array or string, symbol');
+	  }
+
+	  if (vals.length <= 0) return object;
+	  var result = {};
+
+	  var _loop = function _loop(key) {
+	    if (object.hasOwnProperty(key)) {
+	      var hasEqualValue = vals.some(function (v) {
+	        if (!isDeep) return v === object[key];
+	        return DeepEqual(v, object[key]);
+	      });
+
+	      if (!hasEqualValue) {
+	        result[key] = object[key];
+	      }
+	    }
+	  };
+
+	  for (var key in object) {
+	    _loop(key);
+	  }
+
+	  var _symbols = Object.getOwnPropertySymbols(object);
+
+	  _symbols.forEach(function (sym) {
+	    var hasEqualValue = vals.some(function (v) {
+	      if (!isDeep) return v === object[sym];
+	      return DeepEqual(v, object[sym]);
+	    });
+
+	    if (!hasEqualValue) {
+	      result[sym] = object[sym];
+	    }
+	  });
+
+	  return result;
+	};
+
+	var index = /*#__PURE__*/Object.freeze({
 		OmitKeys: OmitKeys,
 		OmitValues: OmitValues
 	});
 
-	var index = {
+	var omitKeys = OmitKeys;
+	var omitValues = OmitValues;
+	var index$1 = {
 	  deepClone: DeepClone,
 	  deepEqual: DeepEqual,
 	  typeChecker: typeChecker,
-	  omit: omit,
 	  arrayUtils: arrayUtils
 	};
 
 	exports.arrayUtils = arrayUtils;
 	exports.deepClone = DeepClone;
 	exports.deepEqual = DeepEqual;
-	exports.default = index;
-	exports.omit = omit;
+	exports.default = index$1;
+	exports.omit = index;
+	exports.omitKeys = omitKeys;
+	exports.omitValues = omitValues;
 	exports.typeChecker = typeChecker;
 
 	Object.defineProperty(exports, '__esModule', { value: true });
