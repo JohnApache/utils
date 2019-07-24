@@ -1,8 +1,7 @@
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(global = global || self, factory(global.JAUtils = {}));
-}(this, function (exports) { 'use strict';
+(function (factory) {
+	typeof define === 'function' && define.amd ? define(factory) :
+	factory();
+}(function () { 'use strict';
 
 	function createCommonjsModule(fn, module) {
 		return module = { exports: {} }, fn(module, module.exports), module.exports;
@@ -1452,6 +1451,55 @@
 	  return _typeof(obj);
 	}
 
+	function _defineProperty(obj, key, value) {
+	  if (key in obj) {
+	    Object.defineProperty(obj, key, {
+	      value: value,
+	      enumerable: true,
+	      configurable: true,
+	      writable: true
+	    });
+	  } else {
+	    obj[key] = value;
+	  }
+
+	  return obj;
+	}
+
+	function ownKeys(object, enumerableOnly) {
+	  var keys = Object.keys(object);
+
+	  if (Object.getOwnPropertySymbols) {
+	    var symbols = Object.getOwnPropertySymbols(object);
+	    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+	      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+	    });
+	    keys.push.apply(keys, symbols);
+	  }
+
+	  return keys;
+	}
+
+	function _objectSpread2(target) {
+	  for (var i = 1; i < arguments.length; i++) {
+	    var source = arguments[i] != null ? arguments[i] : {};
+
+	    if (i % 2) {
+	      ownKeys(source, true).forEach(function (key) {
+	        _defineProperty(target, key, source[key]);
+	      });
+	    } else if (Object.getOwnPropertyDescriptors) {
+	      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+	    } else {
+	      ownKeys(source).forEach(function (key) {
+	        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+	      });
+	    }
+	  }
+
+	  return target;
+	}
+
 	function _toConsumableArray(arr) {
 	  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
 	}
@@ -1980,7 +2028,7 @@
 	    throw new TypeError('keys type is array or string, symbol');
 	  }
 
-	  if (vals.length <= 0) return object;
+	  if (vals.length <= 0) return _objectSpread2({}, object);
 	  var result = {};
 
 	  var _loop = function _loop(key) {
@@ -2016,29 +2064,70 @@
 	  return result;
 	};
 
-	var index = /*#__PURE__*/Object.freeze({
+	var omit = /*#__PURE__*/Object.freeze({
 		OmitKeys: OmitKeys,
 		OmitValues: OmitValues
 	});
 
-	var omitKeys = OmitKeys;
-	var omitValues = OmitValues;
-	var index$1 = {
-	  deepClone: DeepClone,
-	  deepEqual: DeepEqual,
-	  typeChecker: typeChecker,
-	  arrayUtils: arrayUtils
+	var DELAY_TIME = 100;
+	/**
+	 * 函数节流
+	 * @param {function} fn 需要节流的函数
+	 * @param {number} delay 节流延迟时间
+	 */
+
+	var Throttle = function Throttle(fn) {
+	  var delay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : DELAY_TIME;
+	  if (!isFunction(fn)) throw new TypeError('params fn is a function');
+	  var lock = false;
+	  return function () {
+	    if (lock) return;
+	    lock = true;
+	    fn && fn();
+
+	    if (delay <= 0) {
+	      lock = false;
+	      return;
+	    }
+
+	    setTimeout(function () {
+	      lock = false;
+	    }, delay);
+	  };
 	};
 
-	exports.arrayUtils = arrayUtils;
-	exports.deepClone = DeepClone;
-	exports.deepEqual = DeepEqual;
-	exports.default = index$1;
-	exports.omit = index;
-	exports.omitKeys = omitKeys;
-	exports.omitValues = omitValues;
-	exports.typeChecker = typeChecker;
+	var DELAY_TIME$1 = 100;
+	/**
+	 * 函数执行防抖
+	 * @param {function} fn 需要防抖的函数
+	 * @param {number} delay 防抖延迟时间
+	 */
 
-	Object.defineProperty(exports, '__esModule', { value: true });
+	var Debounce = function Debounce(fn) {
+	  var delay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : DELAY_TIME$1;
+	  if (!isFunction(fn)) throw new TypeError('params fn is a function');
+	  var timer;
+	  return function () {
+	    clearTimeout(timer);
+	    if (delay <= 0) return fn && fn();
+	    timer = setTimeout(function () {
+	      fn && fn();
+	    }, delay);
+	  };
+	};
+
+	var omitKeys = OmitKeys;
+	var omitValues = OmitValues;
+	module.exports = {
+	  deepClone: DeepClone,
+	  typeChecker: typeChecker,
+	  omit: omit,
+	  arrayUtils: arrayUtils,
+	  deepEqual: DeepEqual,
+	  omitKeys: omitKeys,
+	  omitValues: omitValues,
+	  throttle: Throttle,
+	  debounce: Debounce
+	};
 
 }));

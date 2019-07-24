@@ -9,7 +9,7 @@ import debounce from './Debounce';
 const omitKeys = omit.OmitKeys;
 const omitValues = omit.OmitValues;
 
-export {
+module.exports = {
 	deepClone,
 	typeChecker,
 	omit,
@@ -17,15 +17,6 @@ export {
 	deepEqual,
 	omitKeys,
 	omitValues,
-	throttle,
-	debounce
-};
-
-export default {
-	deepClone,
-	deepEqual,
-	typeChecker,
-	arrayUtils,
 	throttle,
 	debounce
 };
