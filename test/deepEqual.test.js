@@ -34,6 +34,19 @@ describe('deepEqual方法测试', () => {
 		expect(deepEqual({a: 1}, {a: 1})).to.be.ok;
 		expect(deepEqual({a: 1}, {a: '1'})).to.be.not.ok;
 	});
+
+	it('判断简单类型typeof不相同的值直接返回false', () => {
+		expect(deepEqual({a: 1}, 'a')).to.be.not.ok;
+	});
+
+	it('判断类型typeof都是object先直接判断具体类型不同返回false', () => {
+		expect(deepEqual(/ss/, {a: 1})).to.be.not.ok;
+		expect(deepEqual(new Date(), {a: 1})).to.be.not.ok;
+		expect(deepEqual([], {a: 1})).to.be.not.ok;
+		expect(deepEqual({a: 1}, new Date())).to.be.not.ok;
+		expect(deepEqual({a: 1}, /ss/)).to.be.not.ok;
+		expect(deepEqual({a: 1}, [])).to.be.not.ok;
+	});
     
 	it('可以判断对象携带symbol数据是否相等', () => {
 		const _key = Symbol();

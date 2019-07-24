@@ -45,7 +45,7 @@ export const OmitValues = (isDeep, object, ...vals) => {
 		throw new TypeError('keys type is array or string, symbol');
 	}
 
-	if(vals.length <= 0) return object;
+	if(vals.length <= 0) return {...object};
 
 	const result = {};
 

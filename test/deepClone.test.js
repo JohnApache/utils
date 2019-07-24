@@ -76,6 +76,16 @@ describe('deepClone 方法测试', () => {
 		const source = {name: 'lili'};
 		const source2 = {info: source, age: 12};
 		source.info = source2;
+		expect(deepClone(source)).to.be.not.equal(source);
+		expect(deepClone(source)).to.be.deep.equal(source);
+	});
+
+	it('deepClone可以复制循环嵌套数组', () => {
+		const source = [];
+		const source1 = {info: source, age: 12};
+		const source2 = {info: source, name: 'lili'};
+		source.push(source1, source2);
+		expect(deepClone(source)).to.be.not.equal(source);
 		expect(deepClone(source)).to.be.deep.equal(source);
 	});
     
