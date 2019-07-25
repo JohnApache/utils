@@ -1610,6 +1610,9 @@
 	var isRegExp = function isRegExp(target) {
 	  return Object.prototype.toString.call(target) === '[object RegExp]';
 	};
+	var isPromise = function isPromise(target) {
+	  return !!target && (_typeof(target) === 'object' || typeof target === 'function') && typeof target.then === 'function';
+	};
 
 	var typeChecker = /*#__PURE__*/Object.freeze({
 		isString: isString,
@@ -1623,7 +1626,8 @@
 		isArray: isArray,
 		isObject: isObject,
 		isDate: isDate,
-		isRegExp: isRegExp
+		isRegExp: isRegExp,
+		isPromise: isPromise
 	});
 
 	var _DeepClone = function _DeepClone(target) {
