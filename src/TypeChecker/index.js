@@ -46,3 +46,11 @@ export const isDate = (target) => {
 export const isRegExp = (target) => {
 	return Object.prototype.toString.call(target) === '[object RegExp]';
 };
+
+export const isPromise = (target) => {
+	return (
+		!!target && 
+        (typeof target === 'object' || typeof target === 'function') && 
+        typeof target.then === 'function'
+	);
+};

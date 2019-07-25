@@ -73,4 +73,9 @@ describe('typechecker 类型检查方法测试', () => {
 		expect(tc.isRegExp(/^test$/)).to.be.ok;
 		expect(tc.isRegExp('test')).to.be.not.ok;
 	});
+
+	it('isPromise()方法测试', () => {
+		expect(tc.isPromise(new Promise(() => {}))).to.be.ok;
+		expect(tc.isPromise('test')).to.be.not.ok;
+	});
 });
