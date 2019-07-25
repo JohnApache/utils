@@ -1,8 +1,8 @@
 {
-  "name": "myutils",
+  "name": "ja-utils",
   "version": "1.0.0",
   "description": "常用工具集",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "test": "nyc mocha --require @babel/register test/*.test.js",
     "test:watch": "mocha --require @babel/register test/*.test.js --watch",
