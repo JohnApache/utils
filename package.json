@@ -1,12 +1,12 @@
 {
   "name": "ja-utils",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "常用工具集",
-  "main": "./dist/index.js",
+  "main": "./dist/JAUtils.js",
   "scripts": {
     "test": "nyc mocha --require @babel/register test/*.test.js",
     "test:watch": "mocha --require @babel/register test/*.test.js --watch",
-    "test:reporter": "nyc --reporter=html --reporter=text mocha --require @babel/register test/*.test.js --reporter mochawesome",
+    "test:reporter": "nyc --reporter=lcov --reporter=text mocha --require @babel/register test/*.test.js --reporter mochawesome",
     "build": "rollup -c",
     "prepublish": "npm run test && npm run build"
   },
@@ -21,11 +21,12 @@
   },
   "homepage": "https://github.com/JohnApache/utils#readme",
   "dependencies": {
-    "@babel/polyfill": "^7.4.4"
+    "@babel/runtime-corejs3": "^7.5.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
+    "@babel/plugin-transform-runtime": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/register": "^7.5.5",
     "chai": "^4.2.0",
@@ -35,6 +36,7 @@
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.0.1",
     "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-resolve": "^5.2.0"
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^5.1.1"
   }
 }

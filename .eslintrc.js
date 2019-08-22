@@ -12,7 +12,8 @@ module.exports = {
     "globals": {
         "define": true,
         "describe": true,
-        "it": true
+        "it": true,
+        "__dirname": true
     },
     "rules": {
         "indent": [
